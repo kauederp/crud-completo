@@ -1,0 +1,72 @@
+*{
+	box-sizing: border-box;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+body{
+	background-color: rgb(148, 148, 148);
+}
+#btnMenu:hover{
+	background-color: rgb(87, 86, 86);
+	color: #fff;
+}
+.linksMenu{
+	border-top: 1px solid #fff;
+}
+.linksMenu a{
+	color:white;
+}
+#menu li a{
+	width: 100%;
+	text-align:center;
+	background-color:rgb(200,200,200);
+	margin-top:5px;
+	text-decoration:none;
+	color:rgb(0,0,0);
+	margin-right:0;
+	font-size:25px;
+	height:60px;
+	padding-top:30px;
+}
+.linksMenu a:hover{
+	color:rgb(0, 82, 235);
+}
+
+#footer-div{
+	position: relative;
+}
+#btns a{
+	background-color: rgb(243, 243, 243);
+}
+#btns a:hover{
+	background-color: rgb(243, 243, 243);
+	color:rgb(0, 82, 235);
+}
+.icone{
+	width: 30px;
+}
+.separador{
+	background-color: transparent;
+	padding: 30vw;
+}
+#listFooter{
+	text-shadow: 2px 1px #000;
+	text-transform: capitalize;
+	background-color: #333;
+	padding: 8.33vw;
+	list-style: none;
+}
+#listFooterInf{
+	text-shadow: 2px 1px #000;
+	padding: 8.33vw;
+	list-style: none;
+}
+table{
+	margin:auto ;
+}
+td,tr{
+	border:1px solid black;
+	background-color: rgb(247, 244, 244);
+	padding: 10px;
+}
