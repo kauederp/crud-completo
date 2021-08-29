@@ -24,7 +24,6 @@ class Database{
             self::$db->exec('SET NAMES utf8');
             
         }catch(PDOException $e){
-            mail($email_sistema, "Mensagem de erro no sistema $sistema", $e->getMessage());
             die("connection Error".$e->getMessage());
         }
         

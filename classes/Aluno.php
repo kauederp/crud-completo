@@ -38,7 +38,7 @@ class Aluno{
             $stmt->bindParam(':matricula', $matricula);
             $stmt->bindParam(':turma_codigo', $turma);
             $stmt->execute();
-        }catch(false) {
+        }catch(PDOException $e) {
             echo 'Error: ' . $e->getMessage();
         }
 

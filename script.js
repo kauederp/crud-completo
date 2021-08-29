@@ -7,3 +7,10 @@ function menuAction(){
         console.log("esconde")
     }
 }
+function update(){
+    if(document.getElementById("update").style.display == "none"){
+        document.getElementById("update").style.display = "block";
+    }else{
+        document.getElementById("update").style.display = "none";
+    }
+}

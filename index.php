@@ -12,27 +12,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css" media="all">
    
-<style>
-    
 
-    a{
-        width: 100%;
-        text-align:center;
-        background-color:rgb(200,200,200);
-        margin-top:5px;
-        text-decoration:none;
-        color:rgb(0,0,0);
-        margin-right:0;
-        font-size:25px;
-        height:60px;
-        padding-top:30px;
-    }
-  
-
-</style>
 </head>
 <body>
-    <div class="conteiner-fluid">
+    <div class="conteiner">
         <div class="d-flex bg-dark text-light">
             <h2 class="d-inline col-10">logo</h2>
             <button id="btnMenu" onclick="menuAction()" class="d-inline ml-auto p-1 col-2">
@@ -51,10 +34,10 @@
         <hr class="separador">
         <div id="btns" class="d-flex flex-column">
             <a class="p-2" href="professores.php">
-            professores <img class="icone" src="imagens/teacher.svg">
+            professores <i class="bi bi-person-lines-fill icone"></i>
             </a>
             <a class="p-2" href="turmas.php">
-                turmas <img class="icone" src="imagens/alunos.svg">
+                turmas <i class="bi bi-people-fill icone"></i>
 
             </a>
             <a class="p-2" href="alunos">
@@ -66,7 +49,7 @@
     <hr class="separador">
     <div class=" footer-div row bg-secondary gx-0 col-12">
         <footer class="d-flex flex-row">
-        <ul id="listFooter">
+        <ul id="listFooter" class="listFooter">
                 <li>
                     <p class="text-light">autor: </p>
                 </li>
@@ -77,12 +60,12 @@
                     <p class="text-light">contatato: </p>
                 </li>
             </ul>
-            <ul id="listFooterInf">
+            <ul id="listFooterInf" class="listFooter">
                 <li>
                     <p class="text-light"> Kauê Delgado Pereira</p>
                 </li>
                 <li> 
-                    <p class="text-light"><a class="text-info bg-transparent gx-0 fs-6" href="mailto:kauederp@gmail.com">kauederp@gmail.com</a></p>
+                    <a class="text-info bg-transparent gx-0" href="mailto:kauederp@gmail.com">kauederp@gmail.com</a>
                 </li> 
                 <li>
                     <p class="text-light"> +55 51 995978589</p>

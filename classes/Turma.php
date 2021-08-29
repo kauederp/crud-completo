@@ -35,7 +35,7 @@ class Turma{
             $stmt->bindParam(':professor_codigo', $professor);
             $stmt->bindParam(':curso', $curso);
             $stmt->execute();
-        }catch(false) {
+        }catch(PDOException $e) {
             echo 'Error: ' . $e->getMessage();
         }
 

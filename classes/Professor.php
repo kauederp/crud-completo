@@ -13,7 +13,7 @@ class Professor{
         return $this->codigo;
     }
 
-    public function getNome(){
+    public function getNome($codigo){
         return $this->nome;
     }
 
@@ -30,6 +30,19 @@ class Professor{
     }
 
     public function delete($codigo)
+    {
+        try{
+            $db=Database::conexao();
+            $stmt = $db->prepare("DELETE FROM professor WHERE professor.codigo = :codigo");
+            $stmt->bindParam(':codigo', $codigo);
+            $stmt->execute();
+            
+        }catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+
+    public function update($nome, $codigo)
     {
         try{
             $db=Database::conexao();
