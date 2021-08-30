@@ -1,9 +1,12 @@
 <?php
-include "./Database.php";
+require_once "./classes/Database.php";
 class Professor{
     private $codigo;
     private $nome;
-    
+    public function __construct(){
+        
+    }
+
     public function setProfessor($codigo, $nome){
         $this->codigo=$codigo;
         $this->nome=$nome;
@@ -13,46 +16,52 @@ class Professor{
         return $this->codigo;
     }
 
-    public function getNome($codigo){
+    public function getNome(){
         return $this->nome;
     }
 
-    public function save($nome)
-    {
+    public function salvar(){
         try{
             $db=Database::conexao();
-            $stmt = $db->prepare("INSERT INTO professor (nome) VALUES (:nome);");
-            $stmt->execute(array(':nome' => $nome));
-        }catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+            $stm=$db->prepare("INSERT INTO professor (nome) VALUES (:nome)");
+            $stm->execute(array(":nome"=>$this->getNome()));
+            #ppegar o id do registro no banco de dados
+            #setar o id do objeto
+        }catch(Exception $ex){
+            echo $ex.getMessage()."<br>";
         }
+        
 
     }
 
-    public function delete($codigo)
-    {
-        try{
-            $db=Database::conexao();
-            $stmt = $db->prepare("DELETE FROM professor WHERE professor.codigo = :codigo");
-            $stmt->bindParam(':codigo', $codigo);
-            $stmt->execute();
+    public function delete(){
+
+    }
+
+    public static function listar(){
+        $db=Database::conexao();
+        $professores=null;
+        $retorno=$db->query("SELECT * FROM professor");
+        while($item=$retorno->fetch(PDO::FETCH_ASSOC)){
+            $professor=new Professor();
+            $professor->setProfessor($item['codigo'],$item['nome'] );
             
-        }catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+            $professores[]=$professor;
         }
+
+        return $professores;
     }
 
-    public function update($nome, $codigo)
-    {
-        try{
-            $db=Database::conexao();
-            $stmt = $db->prepare("DELETE FROM professor WHERE professor.codigo = :codigo");
-            $stmt->bindParam(':codigo', $codigo);
-            $stmt->execute();
-            
-        }catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
+
+    public static function getProfessor($codigo){
+        $db=Database::conexao();
+        $retorno=$db->query("SELECT * FROM professor WHERE codigo= $codigo");
+        if($retorno){
+            $item=$retorno->fetch(PDO::FETCH_ASSOC);
+            $professor=new Professor();
+            $professor->setProfessor($item['codigo'],$item['nome'] );
+            return $professor;
         }
+        return false;
     }
-  
 }

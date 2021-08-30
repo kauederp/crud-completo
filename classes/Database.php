@@ -1,7 +1,7 @@
 <?php
 
 class Database{
-    /** 
+    /**
      * Guarda a conexão PDO
      */
     private static $db;
@@ -14,6 +14,8 @@ class Database{
         $driver="mysql";
 
         #Informações do sistema
+        $sistema="Aula Info";
+        $email_sistema="gsd@ggfgf.com.br";
 
         try{
             #Atribui o objeto PDO a variável estática
@@ -24,6 +26,7 @@ class Database{
             self::$db->exec('SET NAMES utf8');
             
         }catch(PDOException $e){
+            mail($email_sistema, "Mensagem de erro no sistema $sistema", $e->getMessage());
             die("connection Error".$e->getMessage());
         }
         

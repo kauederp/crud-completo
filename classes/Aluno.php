@@ -28,33 +28,4 @@ class Aluno{
     public function getTurma(){
         return $this->turma;
     }
-
-    public function save($nome,$matricula,$turma)
-    {
-        try{
-            $db=Database::conexao();
-            $stmt = $db->prepare("INSERT INTO aluno ( nome, matricula, turma_codigo) VALUES (:nome, :matricula, :turma_codigo)");
-            $stmt->bindParam(':nome', $nome);
-            $stmt->bindParam(':matricula', $matricula);
-            $stmt->bindParam(':turma_codigo', $turma);
-            $stmt->execute();
-        }catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
-        }
-
-    }
-
-    public function delete($codigo)
-    {
-        try{
-            $db=Database::conexao();
-            $stmt = $db->prepare("DELETE FROM `aluno` WHERE `aluno`.`codigo` = :codigo ");
-            $stmt->bindParam(':codigo', $codigo);
-            $stmt->execute();
-            
-        }catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
-        }
-    }
-
 }
