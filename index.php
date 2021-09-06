@@ -11,9 +11,10 @@
 
 
 
-// função de carregamento automático
 session_start(); // sessoes iniciam aqui
 //include "config.php";
+
+// função de carregamento automático
 spl_autoload_register(function ($class_name){
     include "./classes/".$class_name.'.php';
 });

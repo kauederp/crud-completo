@@ -88,7 +88,7 @@ class Turma{
 
 */
     public function getProfessor(){
-        return $this->professor;
+		return $this->professor;
     }
 
 /**
@@ -175,6 +175,6 @@ class Turma{
             $turma->setTurma($item['codigo'],$item['curso'],$item['nome'],$professor );
            return $turma;
         }
-        return false;
+        return $turma;
     }
 }

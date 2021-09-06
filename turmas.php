@@ -107,7 +107,7 @@ if(!isset($turma)){
         <div class="input-group mb-2"> 
             <label class="input-group-text" for="inputGroupCurso">Curso</label>   
             <select class="form-select" name="curso-turma">
-                <option value="<?php echo $turma->getCurso() ?>"><?php echo $turma->getCurso() ?></option>
+                <option value="<?php echo $turma->getCurso(); ?>"><?php echo $turma->getCurso(); ?></option>
                 <option value="Informática">Informática</option>
                 <option value="Eletrônica">Eletrônica</option>
                 <option value="Eletrotécnica">Eletrotécnica</option>
