@@ -14,3 +14,16 @@ function update(){
         document.getElementById("update").style.display = "none";
     }
 }
+
+function corTabela(){
+    linha = document.getElementsByTagName("tr");
+    var i=0;
+    while(i<linha.length){
+        if(i%2!=0){
+            linha[i].style.backgroundColor="#fff";
+        }else{
+            linha[i].style.backgroundColor="rgb(244,244,244)";
+        }
+        i++;    
+    }    
+}
