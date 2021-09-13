@@ -1,52 +1,62 @@
 <?php 
 
-if (isset($_GET['acao'])) {
-    if ($_GET['acao'] == "salvar") {
-        if ($_POST['enviar-aluno']) {
-            $turma = new Turma();
-            $turma->setTurma($_POST['turma'], null, null, null);
-            $aluno = new Aluno();
-            $aluno->setAluno(
-                $_POST['codigo'],
-                $_POST['nome'],
-                $_POST['matricula'],
-                $_POST['turma']
-            );
-
-            if ($aluno->salvar()) {
-                $msg['msg'] = "Registro Salvo com sucesso!";
-                $msg['class'] = "success";
-            } else {
-                $msg['msg'] = "Falha ao salvar Registro!";
-                $msg['class'] = "success";
-            }
-            $_SESSION['msgs'][] = $msg;
-            unset($aluno);
-        }
-    } else if ($_GET['acao'] == "excluir") {
-        if (isset($_GET['codigo'])) {
-            if (Aluno::excluir($_GET['codigo'])) {
-                $msg['msg'] = "Registro excluido com sucesso!";
-                $msg['class'] = "success";
-            } else {
-                $msg['msg'] = "Falha ao excluir Registro!";
-                $msg['class'] = "danger";
-            }
-            $_SESSION['msgs'][] = $msg;
-        }
-        header("location: index.php?pagina=alunos");
-    } else if ($_GET['acao'] == "editar") {
-        if (isset($_GET['codigo'])) {
-            $aluno = Aluno::getAluno($_GET['codigo']);
-        }
-    }
+if(isset($_GET['id'])){
+    $_SESSION['codigo'] = $_GET['id'];
 }
-
 
 if(!isset($aluno)){
     $aluno = new Aluno();
     $aluno->setAluno(null,null,null,new Turma());
 }
+
+if(isset($_POST['editar-aluno']) and $_POST['nome']!='' and $_POST['matricula']!='' and $_POST['turma']!=''){
+    $aluno->update($_SESSION['codigo'], $_POST['nome'], $_POST['matricula'], $_POST['turma']);
+    unset($_SESSION['codigo']);
+    header("Location: http://localhost/crud-completo/index.php?pagina=alunos&msg=edited");
+    
+}
+
+if(isset($_POST['enviar-aluno']) and $_POST['nome']!='' and $_POST['matricula']!='' and $_POST['turma']!='' and !isset($_GET['acao'])){
+    $aluno->salvar($_POST['nome'],$_POST['matricula'],$_POST['turma']);
+    $_SESSION['msg'] = "ok";
+    header("Location: http://localhost/crud-completo/index.php?pagina=alunos&msg=saved");
+}
+
+
+if(isset($_GET['delete'])){
+    $aluno->delete($_GET['delete']);
+    header("Location: http://localhost/crud-completo/index.php?pagina=alunos&msg=deleted");
+}
+
+if(isset($_GET['msg'])){
+    if($_SESSION['msg']=="saved"){
+        echo "<div class='p-2 bg-success' id='msgs'>";
+        echo "<div class='text-light'>salvo com sucesso</div>";
+
+    }else if($_GET['msg']=="edited"){
+        echo "<div class='p-2 bg-warning' id='msgs'>";
+        echo "<div class='text-light'>editado com sucesso</div>";
+    
+    }else if($_GET['msg']=="deleted"){
+        echo "<div class='p-2 bg-danger' id='msgs'>";
+        echo "<div class='text-light'>deletado com sucesso</div>";
+    }
+    
+    
+    echo "<script> 
+    setTimeout(
+        function(){
+            document.querySelector('#msgs').remove();
+        }
+        ,
+        2500
+    );
+    </script>";
+    echo "</div>";
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -60,25 +70,84 @@ if(!isset($aluno)){
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <title>Alunos</title>
         <style>
+
+        #form-aluno{
+            padding-left:5vw;
+        }
+        input{
+            width:93%;
+        }
+        td{
+            min-width:100px;
+        }
+        #msgs{
+            position: absolute;
+            bottom:80px;
+            right:10px;
+            margin-top:90px;
+        
+        }
+        .load{
+            position: absolute;
+            bottom:20px;
+            right:10px;
+            margin-top:90px;
+            z-index: 999;
+        }
+        .enviar-btn{
+                margin-top: 10px;
+        }
+        @media (min-width: 576px) {
             label{
                 padding: 4px 0;
+
             }
-            #formDiv1{
-                margin-left: 30vw;
+            #formDiv2{
+                margin-left:50px;
             }
+            #form-aluno{    
+                padding-left:35vw;
+            }
+            #div-enviar{
+                margin-right:-40%;
+            }
+            .enviar-btn{
+                width: 200px;
+                
+            }
+            #msgs{
+                position: absolute;
+                bottom:80px;
+                right:10px;
+
+            }
+            .load{
+                position: absolute;
+                bottom:20px;
+                right:10px;
+                margin-top:90px;
+                z-index: 999;
+            }
+            td{
+                width:100vw;
+            }
+        }
         </style>
     </head>
-<body onload="corTabela()">
+<body class="container-fluid gx-0 " onload="corTabela()">
     
-    <form class="row col-10" name="form-aluno" method="POST" action="?acao=salvar">
-        <div id="formDiv1" class="bg-light p-4 d-flex flex-column col-2">
+    <form id="form-aluno" class="row col-12 bg-light gx-0" name="form-aluno" method="POST" action="?pagina=alunos">
+        <div id="formDiv1" class=" d-none bg-light row  d-sm-flex flex-sm-column col-sm-2 col-12">
             <label for="nome">nome</label>
             <label for="matricula">matricula</label>
             <label for="turma">turma</label>
         </div>
-        <div id="formDiv2" class="bg-light p-4 d-flex flex-column col-3 ">
+        <div id="formDiv2" class="row  d-flex flex-column col-sm-3 col-12">
+            <label class="d-sm-none "for="nome">nome</label>
             <input type="text" name="nome" value="<?php echo $_GET['nome']?>" id="nomeInput">
-            <input type="number" name="matricula" value="<?php echo $_GET['matricula']?>" id="matriculaInput">
+            <label class="d-sm-none "for="matricula">matricula</label>
+            <input type="number" min="0" name="matricula" value="<?php echo $_GET['matricula']?>" id="matriculaInput">
+            <label class="d-sm-none "for="turma">turma</label>
             <select name="turma" id="turmaSelect">
                 <?php
                     $turmas=Turma::listar();
@@ -89,28 +158,50 @@ if(!isset($aluno)){
                     
                 ?>
             </select>
-            <input type="submit" class="m-3 d-block btn btn-primary" name="enviar-aluno" value="Enviar"/>
+           
         </div>
+        <div id="div-enviar">
+        <?php if(isset($_GET['acao'])){
+            echo '<input type="submit" class="enviar-btn d-block btn btn-primary" name="editar-aluno" value="Editar"/>';
+            }else{
+                echo '<input type="submit" class=" enviar-btn d-block btn btn-primary" name="enviar-aluno" value="Enviar"/>';
+            }
+        ?></div>
     </form>
     <br>
-    <table class="table" >
+    <table class="table row gx-0 overflow-auto" >
         <thead>
             <tr>
-                <td class="bg-light" scope="col">codigo</td>
-                <td class="bg-light" scope="col">nome</td>
-                <td class="bg-light" scope="col">matricula</td>
-                <td class="bg-light" scope="col">turma</td>
-                <td class="bg-light" scope="col">professor</td>
-                <td class="bg-light" scope="col">editar</td>
-                <td class="bg-light" scope="col">deletar</td>
+                <td class="bg-light">codigo</td>
+                <td class="bg-light">nome</td>
+                <td class="bg-light">matricula</td>
+                <td class="bg-light">turma</td>
+                <td class="bg-light">professor</td>
+                <td class="bg-light">editar</td>
+                <td class="bg-light">deletar</td>
             </tr>
         </thead>
         <tbody>
         <?php 
+        echo "fo";
             $alunos=$aluno->listar();
             foreach($alunos as $aluno){
                 echo $aluno;
-            }
+                echo "<div class='p-2 bg-success load'>";
+                echo "<div class='text-light'>carregado com sucesso</div>";
+                    
+                    
+                    echo "<script> 
+                    setTimeout(
+                        function(){
+                            document.querySelectorAll('.load')[0].remove();
+                        }
+                        ,
+                        1500
+                    );
+                    </script>";
+                    echo "</div>";
+                }
         ?>
         </tbody>
     </table>

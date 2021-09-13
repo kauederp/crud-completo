@@ -66,55 +66,58 @@ class Aluno{
                 $nomeTurma = $turma->getNome();
             }
             array_push($item,"<tr>
-            <td scope='col'>{$linha['codigo']}</td>
-            <td scope='col'>{$linha['nome']}</td>
-            <td scope='col'>{$linha['matricula']}</td>
-            <td scope='col'>{$nomeTurma}</td>
-            <td scope='col'>$nomeProfessor</td>
-            <td scope='col'><a href='http://localhost/crud-completo/index.php?pagina=alunos&acao=editar&id={$linha['codigo']}&nome={$linha['nome']}&matricula={$linha['matricula']}'><i class='link-primary bi bi-pen-fill'></i></a></td>
-            <td scope='col'><a href='http://localhost/crud-completo/index.php?pagina=alunos&acao=excluir&id={$linha['codigo']}'><i class='bi link-danger bi-trash-fill'></i></a></td>
+            <td>{$linha['codigo']}</td>
+            <td>{$linha['nome']}</td>
+            <td>{$linha['matricula']}</td>
+            <td>{$nomeTurma}</td>
+            <td>$nomeProfessor</td>
+            <td><a href='http://localhost/crud-completo/index.php?pagina=alunos&acao=editar&id={$linha['codigo']}&nome={$linha['nome']}&matricula={$linha['matricula']}&turma={$linha['turma_codigo']}'><i class='link-primary bi bi-pen-fill'></i></a></td>
+            <td><a href='http://localhost/crud-completo/index.php?pagina=alunos&delete={$linha['codigo']}'><i class='bi link-danger bi-trash-fill'></i></a></td>
             </tr>");
         }
 
         return $item;
     }
 
-    public function salvar() {
-        try {
-            $db = Database::conexao();
-            if (empty($this->codigo)) {
-                $stm = $db->prepare("INSERT INTO aluno (nome, matricula, turma_codigo) VALUES (:nome,:matricula,:turma)");
-                $stm->execute(array(
-                    ":nome" => $this->getNome(), 
-                    ":matricula" => $this->getMatricula(), 
-                    ":turma" => $this->getTurma()->getCodigo()
-                ));
-            } else {
-                $stm = $db->prepare("UPDATE aluno SET nome=:nome,matricula=:matricula,turma_codigo=:turma_codigo WHERE codigo=:codigo");
-                $stm->execute(array(
-                ":nome" => $this->nome, 
-                ":matricula" => $this->matricula, 
-                ":turma_codigo" => $this->turma->getCodigo(), 
-                ":codigo" => $this->codigo
-            ));
-            }
-            return true;
-        } catch (Exception $ex) {
-            echo $ex->getMessage() . "<br>";
-            return false;
+    public function salvar($nome, $matricula, $turma) {
+        try{
+            $db=Database::conexao();
+            $stmt = $db->prepare("INSERT INTO aluno (nome, matricula, turma_codigo) VALUES (:nome,:matricula,:turma);");
+            $stmt->bindParam(':nome', $nome);
+            $stmt->bindParam(':matricula', $matricula);
+            $stmt->bindParam(':turma', $turma);
+            $stmt->execute();
+        }catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
         }
-        return true;
     }
 
 
-    public static function excluir($codigo) {
-        $db = Database::conexao();
-        if ($db->query("DELETE FROM aluno WHERE codigo=$codigo")) {
-            return true;
+    public static function delete($codigo) {
+        try{
+            $db=Database::conexao();
+            $stmt = $db->prepare("DELETE FROM aluno WHERE aluno.codigo = :codigo");
+            $stmt->bindParam(':codigo', $codigo);
+            $stmt->execute();
+            
+        }catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
         }
-        return false;
     }
-
     
+    public function update($codigo, $nome, $matricula, $turma) {
+        try{
+            $db=Database::conexao();
+            $stmt= $db->prepare("UPDATE aluno SET nome=:codigo, nome=:nome, matricula=:matricula, turma_codigo=:turma WHERE codigo=:codigo ;");
+            $stmt->execute(array(
+                ':codigo' => $codigo,
+                ':nome' => $nome,
+                ':matricula' => $matricula,
+                ':turma' => $turma
+                ));
+        }catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
 
 }

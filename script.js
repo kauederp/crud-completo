@@ -1,10 +1,10 @@
 function menuAction(){
     if(document.getElementById("menu").style.display == "none"){
         document.getElementById("menu").style.display = "flex";
-        console.log("mostra")
+        document.getElementById("btn-menu").innerHTML = '<i class="bi bi-x"></i>';
     }else{
         document.getElementById("menu").style.display = "none";
-        console.log("esconde")
+        document.getElementById("btn-menu").innerHTML = '<i class="bi bi-list"></i>';
     }
 }
 function update(){
